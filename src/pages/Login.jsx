@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable operator-linebreak */
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+
 import {
   Box,
   Button,
@@ -13,9 +17,15 @@ import {
 } from '@material-ui/core';
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
+import AuthService from '../services/auth.service';
 
-const Login = () => {
+// eslint-disable-next-line no-unused-vars
+const Login = (props) => {
+  // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
+  const [Loading, setLoading] = useState(false);
+  // eslint-disable-next-line prefer-const
 
   return (
     <>
@@ -34,15 +44,45 @@ const Login = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values, actions) => {
+              console.log('test');
+
+              try {
+                const auth = await AuthService.login(
+                  values.email,
+                  values.password
+                );
+
+                console.log('Auth Result ');
+                console.log(auth);
+                if (auth) {
+                  // eslint-disable-next-line react/prop-types
+                  navigate('/app/dashboard');
+                }
+              } catch (error) {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+
+                setLoading(false);
+                // setMessage(resMessage);
+                console.log(resMessage);
+
+                // navigate('/app/dashboard', { replace: true });
+              }
             }}
           >
             {({
@@ -54,12 +94,14 @@ const Login = () => {
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit(values);
+                }}
+              >
                 <Box sx={{ mb: 3 }}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
+                  <Typography color="textPrimary" variant="h2">
                     Sign in
                   </Typography>
                   <Typography
@@ -70,15 +112,8 @@ const Login = () => {
                     Sign in on the internal platform
                   </Typography>
                 </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
                     <Button
                       color="primary"
                       fullWidth
@@ -90,11 +125,7 @@ const Login = () => {
                       Login with Facebook
                     </Button>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                  <Grid item xs={12} md={6}>
                     <Button
                       fullWidth
                       startIcon={<GoogleIcon />}
@@ -130,7 +161,7 @@ const Login = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   type="email"
-                  value={values.email}
+                  value={values ? values.email : ''}
                   variant="outlined"
                 />
                 <TextField
@@ -143,7 +174,7 @@ const Login = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   type="password"
-                  value={values.password}
+                  value={values ? values.password : ''}
                   variant="outlined"
                 />
                 <Box sx={{ py: 2 }}>
@@ -158,17 +189,9 @@ const Login = () => {
                     Sign in now
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
+                <Typography color="textSecondary" variant="body1">
                   Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
+                  <Link component={RouterLink} to="/register" variant="h6">
                     Sign up
                   </Link>
                 </Typography>

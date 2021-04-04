@@ -1,4 +1,4 @@
-export default (name = '') => name
+export default (name = 'dum') => name
   .replace(/\s+/, ' ')
   .split(' ')
   .slice(0, 2)
