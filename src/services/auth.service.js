@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://authserviceastrobasic.azurewebsites.net/api';
+const API_URL = 'https://securecosmic.azurewebsites.net/api';
 
 const register = (email, password, firstName, lastName) => axios.post(`${API_URL}/Accounts`, {
   email,
