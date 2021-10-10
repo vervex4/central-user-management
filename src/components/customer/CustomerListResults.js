@@ -128,21 +128,21 @@ const CustomerListResults = ({ customers, ...rest }) => {
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {customer.customerName}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {customer.emailId}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {`${customer.totalSaved}, ${customer.totalGenerated}, ${customer.policyID}`}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {customer.policyName}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
+                    {moment(customer.joinedOn).format('DD/MM/YYYY')}
                   </TableCell>
                 </TableRow>
               ))}
