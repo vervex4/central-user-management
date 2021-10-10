@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authheader from './auth-header';
 
-const API_URL = 'https://securecosmic.azurewebsites.net/api';
+const API_URL = 'https://authserviceastrobasic.azurewebsites.net/api';
 // eslint-disable-next-line consistent-return
 const getMyAllCustomers = async () => {
   try {

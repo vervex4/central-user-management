@@ -6,6 +6,8 @@ import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
 import { QueryClient, QueryClientProvider } from 'react-query';
+// eslint-disable-next-line no-unused-vars
+import { AuthProvider } from './context/authprovider';
 
 const queryClient = new QueryClient();
 
